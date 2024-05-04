@@ -2,8 +2,11 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.SwerveConstants;
 
+import java.time.Period;
+
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
+//import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -17,7 +20,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Constants.*;
+
+
 public class SwerveModule extends SubsystemBase {
+
 
   /**
    * Class to represent and handle a swerve module
@@ -26,6 +33,12 @@ public class SwerveModule extends SubsystemBase {
    * for both rotation and linear movement
    */
 
+
+
+
+ 
+
+ 
   private static SwerveBase swerveDrive;
   public PIDController testRotationController;
 
@@ -44,6 +57,8 @@ public class SwerveModule extends SubsystemBase {
   public CANSparkMax getRotationMotor() {
     return rotationMotor;
   }
+
+  
 
   private final RelativeEncoder driveEncoder;
   private final RelativeEncoder rotationEncoder;
@@ -65,7 +80,7 @@ public class SwerveModule extends SubsystemBase {
       SwerveBase swerveSubsystem) {
 
     swerveDrive = swerveSubsystem;
-
+  
     driveMotor = new CANSparkMax(driveMotorId, MotorType.kBrushless);
     rotationMotor = new CANSparkMax(rotationMotorId, MotorType.kBrushless);
 
@@ -81,8 +96,8 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.setIdleMode(IdleMode.kBrake);
     rotationMotor.setIdleMode(IdleMode.kBrake);
 
-    //TODO if brownout error occurs then lower smart current
-    driveMotor.setSmartCurrentLimit(85);//was 60 change to help fix comminiczton error
+    //If brownout error occurs then lower smart current in SwerveBase Periodic
+    driveMotor.setSmartCurrentLimit(SwerveBase.SwerveAmps);
 
     rotationController = rotationMotor.getPIDController();
     driveController = driveMotor.getPIDController();
@@ -241,11 +256,13 @@ public class SwerveModule extends SubsystemBase {
     double angularVelolictySetpoint = optimizedDesiredState.speedMetersPerSecond /
         (SwerveConstants.wheelDiameter / 2.0);
     if (RobotState.isAutonomous()) {
-      driveMotor.setVoltage(SwerveConstants.driveFF.calculate(angularVelolictySetpoint));
-
+      driveMotor.setVoltage(optimizedDesiredState.speedMetersPerSecond * SwerveConstants.maxSpeed);
+    // was driveMotor.setVoltage(SwerveConstants.driveFF.calculate(angularVelolictySetpoint)
     } else {
 
-      driveMotor.set(optimizedDesiredState.speedMetersPerSecond / SwerveConstants.maxSpeed);
+      driveMotor.set(optimizedDesiredState.speedMetersPerSecond * SwerveConstants.maxSpeed);
+      //was (optimizedDesiredState.speedMetersPerSecond / SwerveConstants.maxSpeed)
+      // this value should not be changed
     }
   }
 
@@ -285,7 +302,10 @@ public class SwerveModule extends SubsystemBase {
     rotationMotor.set(0);
   }
 
+
   public SwerveModuleState getState() {
     return new SwerveModuleState(getCurrentVelocityRadiansPerSecond() , getIntegratedAngle());
   }
+
+
 }

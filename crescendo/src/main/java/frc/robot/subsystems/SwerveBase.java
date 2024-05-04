@@ -43,11 +43,34 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 
 
+
 public class SwerveBase extends SubsystemBase {  
   private final WPI_Pigeon2 pigeonSensor;
   private final AHRS navX;
   private Pigeon2Configuration pigeonConfig;
   private double oldPigeonYaw = 0.0;
+
+ 
+public static boolean needMoreAmps;
+public static int SwerveAmps;
+//Checks if setNeedMoreAmps is True of false and change need more
+//amps based on if the command is being called
+public void setNeedMoreAmps(boolean set) {
+    needMoreAmps = set;
+  }
+
+
+
+public static boolean FasterSwerve;
+public void setFasterSwerve(boolean set) {
+  FasterSwerve = set;
+  }
+public static boolean SlowerSwerve;
+public void setSlowerSwerve(boolean set) {
+   SlowerSwerve = set;
+  }
+  
+
 
   public SwerveBase() {
     navX = new AHRS(SPI.Port.kMXP);
@@ -110,9 +133,9 @@ public class SwerveBase extends SubsystemBase {
               // This will flip the path being followed to the red side of the field.
               // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              Boolean alliance = Constants.isRed;
+              Boolean alliance = RobotContainer.isRed;
               if (alliance) {
-                return alliance == Constants.isRed;
+                return alliance == RobotContainer.isRed;
               }
               return false;
             },
@@ -209,7 +232,6 @@ public class SwerveBase extends SubsystemBase {
   
   @Override
   public void periodic() {
-
     // update the odometry every 20ms
     odometry.update(getHeading(), getModulePositions());
 
@@ -228,7 +250,34 @@ public class SwerveBase extends SubsystemBase {
     SmartDashboard.putString("FR Wheel Angle", frontRight.getCanCoderAngle().toString());
     SmartDashboard.putString("RL Wheel Angle", rearLeft.getCanCoderAngle().toString());
     SmartDashboard.putString("RR Wheel Angle", rearRight.getCanCoderAngle().toString());
-  }
+
+
+    //Check if need more amps is true.
+    //If it is it will increase smart limiter in SwerveModule
+if (!needMoreAmps) {
+        System.out.println("Amps are 50");
+        SwerveAmps = 50;//Value of swerveAmps without button pressed
+      }
+if (needMoreAmps) {
+      System.out.println("Amps are 60");
+      SwerveAmps = 60;//Value of swerveAmps with button pressed
+    }
+
+
+    if (FasterSwerve = true) {
+        System.out.println("Swerve is Fast");
+       SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 5.5;//Faster swerve speed
+      }
+if (SlowerSwerve = true) {
+      System.out.println("Swerve is Slow");
+      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 1.5;//Slower swerve speed
+    }
+    else{
+      System.out.println("Swerve is Normal");
+      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 4.5;//Normal swerve speed
+    }
+ }
+  
 
   /**
    * method for driving the robot
@@ -261,6 +310,9 @@ public class SwerveBase extends SubsystemBase {
       needPigeonReset = false;
       pigeonSensor.setYaw(oldPigeonYaw);
     }
+
+
+
 
     ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
       forward, strafe, rotation, getHeading()

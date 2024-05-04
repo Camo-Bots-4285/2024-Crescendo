@@ -21,13 +21,16 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.Constants.VisionConstants;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
+import frc.robot.RobotContainer;
 
 public class AprilTagSubsystem extends SubsystemBase {
   
@@ -178,20 +181,18 @@ public class AprilTagSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // System.out.println("Pose: " + Robot.m_robotContainer.m_swerveBase.getPose3d());
     publisher.set(Robot.m_robotContainer.m_swerveBase.getPose3d());
-  }
-
-
-
-
-
-
-
+  
+}
 
 
 //Runs all the time (Both auto and teleOp)
   @Override
   public void periodic() {  
-    
+  
+ if (RobotState.isAutonomous()) {
+    if (RobotContainer.CamerasInAuto = true){//Could breack this up into indivdual camera if you wanted
+
+     
 
     photonEstimator1.run();
     //photonEstimator2.run();
@@ -261,7 +262,19 @@ public class AprilTagSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // System.out.println("Pose: " + Robot.m_robotContainer.m_swerveBase.getPose3d());
     publisher.set(Robot.m_robotContainer.m_swerveBase.getPose3d());
+    }
   }
+  else {//Will test if this works to turn cameras on and off using smart dashboard but still uses them inteleop
+
+    
+  }
+  
+  
+  
+  
+  }
+
+
 
   @Override
   public void simulationPeriodic() {

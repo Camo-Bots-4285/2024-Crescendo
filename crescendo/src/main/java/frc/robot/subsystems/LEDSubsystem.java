@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.LEDConstants;
+import frc.robot.RobotContainer;
 
 
 public class LEDSubsystem extends SubsystemBase {
@@ -31,21 +32,21 @@ public class LEDSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    boolean ally = Constants.isRed;
+    boolean ally = RobotContainer.isRed;
     if (ally) {
-        if (Constants.isRed == true) {
+        if (RobotContainer.isRed == true) {
             //System.out.println("Alliance Red");
             set_red(LEDConstants.DIO_ENABLE);
             set_blue(LEDConstants.DIO_DISABLE);
         }
-        if (Constants.isRed == false) {
+        if (RobotContainer.isRed == false) {
             //System.out.println("Alliance Blue");
             set_red(LEDConstants.DIO_DISABLE);
             set_blue(LEDConstants.DIO_ENABLE);
         }
     }
     else {
-        System.out.println("I'm unset!");
+       // System.out.println("I'm unset!");
         set_red(LEDConstants.DIO_DISABLE);
         set_blue(LEDConstants.DIO_DISABLE);
         //set_win(LEDConstants.DIO_DISABLE);

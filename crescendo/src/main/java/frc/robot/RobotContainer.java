@@ -8,10 +8,12 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.Constants.*;
 
 import java.util.function.BiFunction;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -19,11 +21,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,6 +39,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   public static SwerveBase m_swerveBase = new SwerveBase();
+  //public static SwerveModule m_SwerveModule = SwerveModule();
   public static AprilTagSubsystem m_aprilTag = new AprilTagSubsystem();
   // do not uncomment public static ArmPivotSubsystem m_armPivotSubsystem = new ArmPivotSubsystem(m_swerveBase);
   public static IntakeSubsystem m_intake = new IntakeSubsystem();
@@ -46,7 +48,9 @@ public class RobotContainer {
   public static ShooterSubsystem m_shooter = new ShooterSubsystem();
   public static LEDSubsystem m_led = new LEDSubsystem();
   public static ArmPivotSubsystem m_ArmPivotSubsystem;
- private SendableChooser<String> mChooser;
+  private SendableChooser<String> mChooser;
+  private SendableChooser<Boolean> mChooser1;
+  private SendableChooser<Boolean> mChooser2;
 
   // public PowerDistributionPanel newPower = new PowerDistributionPanel(0);
   // public ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -84,6 +88,9 @@ public class RobotContainer {
   private JoystickButton btn_trap_scoring;
   private JoystickButton btn_far_feeder;
 
+  private JoystickButton btn_more_amps;
+  private JoystickButton btn_faster_swerve;
+  private JoystickButton btn_slower_swerve;
 
   private JoystickButton btn_shooting_with_driver;  
   private JoystickButton btn_driver_fire;  
@@ -93,11 +100,14 @@ public class RobotContainer {
   private DoubleSupplier stopRotation;
   private BiFunction<Double, Double, Double> Clamp;
   
-    private PIDController angleController;
+  private PIDController angleController;
 
+  public static boolean CamerasInAuto;
+  
+ public static boolean isRed;
   /* Subsystems */
   // to bring back arm pivot
-
+  
   /* Parent Class */
   private final Robot m_robot;
 
@@ -118,15 +128,30 @@ public class RobotContainer {
     /* maps sliderAxis to be between 0.1 and 1.0 */
     stopRotation = () -> driverJoystick.getRawButton(9) ? 0.0 : 1.0; //Locks Rotation
     Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
-    // mChooser = new SendableChooser<>();
-    // mChooser.setDefaultOption("Default Auto", "C-Shoot3-N2-Shoot6");
-    // mChooser.addOption("6 Piece", "C-N3-Shoot6-N7-Shoot6");
-    // mChooser.addOption("Test Aim", "AlignShooterTest");
-    // mChooser.addOption("3 By 3", "3 By 3");
-    // mChooser.addOption("Hellos", "Hellos");
-    // mChooser.addOption("B-Shoot2-N2-Shoot5", "B-Shoot2-N2-Shoot5");
-    // mChooser.addOption("New New Auto", "New New Auto");
-    // SmartDashboard.putData("Auto Choices" ,  mChooser);
+    
+    //Put auto in here and they will show up in smart dash board do no forget to select auto before match
+    mChooser = new SendableChooser<>();
+    mChooser.setDefaultOption("Default Auto", "C-Shoot3-N2-Shoot6");
+    mChooser.addOption("6 Piece", "C-N3-Shoot6-N7-Shoot6");
+    mChooser.addOption("Test Aim", "AlignShooterTest");
+    mChooser.addOption("3 By 3", "3 By 3");
+    mChooser.addOption("Hellos", "Hellos");
+    mChooser.addOption("B-Shoot2-N2-Shoot5", "B-Shoot2-N2-Shoot5");
+    mChooser.addOption("New New Auto", "New New Auto");
+    SmartDashboard.putData("Auto Choices" ,  mChooser);
+
+
+    mChooser1 = new SendableChooser<>();
+    mChooser1.setDefaultOption("Yes", CamerasInAuto = true);
+    mChooser1.addOption("No", CamerasInAuto = false);
+    SmartDashboard.putData("All Cameras in Auto" ,  mChooser1);
+
+    mChooser2 = new SendableChooser<>();
+    mChooser2.setDefaultOption("Red", isRed = true);//Constants.isRed
+    mChooser2.addOption("Blue", isRed = false);
+    SmartDashboard.putData("Aliance Color" ,  mChooser2);
+
+   
 
     // Controles rotaion Whne Auto Targeting
     angleController = new PIDController(1.0, 0.0, 0.0);//9   changed 3/21/2024 by cal ask wessly to make a sepret speed cosntant for this
@@ -149,6 +174,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     configureBindings();
   }
+
 
   public Joystick getJoystick() {
     return driverJoystick;
@@ -186,7 +212,23 @@ public class RobotContainer {
   btn_reset_yaw = new JoystickButton(driverJoystick, 7);
     btn_reset_yaw.onTrue(new InstantCommand(() -> m_swerveBase.setNeedPigeonReset(true)));
 
+
     
+    //You are welcome. I fucking did it. When button is pressed max amps to swerve drive will change
+     btn_more_amps = new JoystickButton(driverJoystick, 7);
+     btn_more_amps.whileTrue(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(true))) ;
+     btn_more_amps.whileFalse(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(false))) ;
+      
+     //This will change max swerve speed thought SwerveBase to slower
+     btn_slower_swerve = new JoystickButton(driverJoystick, 7);
+     btn_slower_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true))) ;
+     btn_slower_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setSlowerSwerve(false))) ;
+
+    //This will change max swerve speed thought SwerveBase to faster
+     btn_faster_swerve = new JoystickButton(driverJoystick, 8);
+     btn_faster_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true))) ;
+     btn_faster_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setFasterSwerve(false))) ;
+
     btn_shooter_feeder = new JoystickButton(driverJoystick, 11);
     btn_shooter_feeder.whileTrue(new ShooterFeederAMP(m_shooterFeeder));
    
@@ -371,12 +413,13 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    return AutoBuilder.buildAuto("A-N1-N4");//"test"mChooser.getSelected()
+    return AutoBuilder.buildAuto(mChooser.getSelected());//if you want hard coded auto do "AutoName"
   }
 
   public SwerveBase getSwerveSubsytem() {
     return m_swerveBase;
   }
+
 
   public LineBreak getLineBreakSubsystem() {
     return m_lineBreak;

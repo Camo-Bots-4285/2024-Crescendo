@@ -324,7 +324,7 @@ public class ArmPivotSubsystem extends SubsystemBase {
 
 
   public void setGoalPose() {
-    speakerPose = Constants.isRed == true ? field.getTagPose(4).get().toPose2d() : field.getTagPose(7).get().toPose2d();
+    speakerPose = RobotContainer.isRed == true ? field.getTagPose(4).get().toPose2d() : field.getTagPose(7).get().toPose2d();
   }
 
   public Pose2d getSpeakerPose(){
@@ -332,11 +332,11 @@ public class ArmPivotSubsystem extends SubsystemBase {
   }
 
   public void setAmpPose(){
-    ampPose = Constants.isRed == true ? field.getTagPose(5).get().toPose2d() : field.getTagPose(6).get().toPose2d();
+    ampPose = RobotContainer.isRed == true ? field.getTagPose(5).get().toPose2d() : field.getTagPose(6).get().toPose2d();
   }
 
   public Rotation2d getAmpAngle(){
-    return Constants.isRed == true ? Rotation2d.fromDegrees(-270) : Rotation2d.fromDegrees(270);
+    return RobotContainer.isRed == true ? Rotation2d.fromDegrees(-270) : Rotation2d.fromDegrees(270);
   }
 
   public Pose2d getAmpPose(){
@@ -344,11 +344,11 @@ public class ArmPivotSubsystem extends SubsystemBase {
   }
 
   public void setHumanFeederPose(){
-    humanfeederPose = Constants.isRed == true ? field.getTagPose(9).get().toPose2d() : field.getTagPose(1).get().toPose2d();
+    humanfeederPose = RobotContainer.isRed == true ? field.getTagPose(9).get().toPose2d() : field.getTagPose(1).get().toPose2d();
   }
 
   public Rotation2d getHumanFeederAngle(){
-    return Constants.isRed == true ? Rotation2d.fromDegrees(45) : Rotation2d.fromDegrees(135);
+    return RobotContainer.isRed == true ? Rotation2d.fromDegrees(45) : Rotation2d.fromDegrees(135);
   }
 
   public Pose2d getHumanFeederPose(){

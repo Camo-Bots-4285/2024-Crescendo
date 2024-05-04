@@ -21,7 +21,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 
-
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.SwerveBase;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -34,8 +35,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
  * wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
-  public static boolean isRed = false;
+ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
@@ -171,9 +171,6 @@ public final class Constants {
   }
 
   public static final class SwerveConstants {
-
-    public static final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(0.1, 0.15, 0.01);
-
     /* Drive Controls */
     public static final int translationAxis = 1;
     public static final int strafeAxis = 0;
@@ -200,8 +197,8 @@ public final class Constants {
 
     public static Translation2d mDriveRadius = new Translation2d(trackWidth/2, wheelBase / 2);
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 1.3; //last comp 1.3 NOT a speed unit; Like I mean for real, this is Cal. "robot gets faster if this is lower 2.0" says wass Cal will tune this value
-    public static final double maxAngularVelocity = 3.5;// Also not a speed unit Calibartion value was 12  24    35
+    public static final double maxSpeed = 1.3; //Wass "faster as number gets closer to two"
+    public static final double maxAngularVelocity = 3.5;//no clue there value will be tune after 2024 seasion
 
     public static final int frontLeftRotationMotorId = 2;
     public static final int frontLeftDriveMotorId = 1;
@@ -220,12 +217,26 @@ public final class Constants {
     public static final int rearLeftRotationEncoderId = 2;
     public static final int rearRightRotationEncoderId = 3;
 
+    //These values affect teleop only 
+    //Auto is contoled by path planner and auto PID 
     //Translational
-    public static final double kTeleDriveMaxSpeedMetersPerSecond = 5.5; // Change Speed in Tele     1.875n   was 10 at comp
-    public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 5.5;//3.0
+ 
+ //working on making buttion to change speed and amp draw\
+ // use pigeon reset as an eample
+    //  public static final double how = x;
+
+  //   if (btn_shooting_without_cameras == true) {
+  //     how.set (3);
+  //   }
+  //   else if (btn_shooting_without_cameras == false) {
+  //     desired_location = ArmPivotConstants.POSITION_PID_INTAKE_FEEDER;
+  //   }
+
+    public static  double kTeleDriveMaxSpeedMetersPerSecond; // will tune 5.5 
+    public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 5.5;//will tune
     //Roational
-    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 0.5;//3.5
-    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 0.5;//3.0
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 0.5;//will tune
+    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 0.5;//will tune
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 
@@ -240,45 +251,7 @@ public final class Constants {
      * Physical location of the apriltag camera on the robot, relative to the center
      * of the robot.
      */
-//Robot In         CAD        RealLife
-//Height       0.567547072    0.562
-//Front Back   0.0631137      0.063
-//Left Right   0.3109483      0.3125
-//
-//BTY Values -0.06, 0.2, -0.2127
-//
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_1 = new Transform3d(
-    //     new Translation3d(-0.06, 0.2, -0.2127),// Get from CAD Model In meters
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(-45.0)));
 
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_2 = new Transform3d(
-    //     new Translation3d(-0.06, 0.2, -0.2127),
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(45.0)));
-
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_3 = new Transform3d(
-    //     new Translation3d(-0.06, 0.2, -0.2127),
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(135.0)));
-
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_4 = new Transform3d(
-    //     new Translation3d(-0.06, 0.2, -0.2127),
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(-135.0)));
-    
-
-    //     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_1 = new Transform3d(
-    //     new Translation3d(0.0, 0.0, 0.0),// Get from CAD Model In meters
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(45.0)));
-
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_2 = new Transform3d(
-    //     new Translation3d(0.0, 0.0, 0.0),
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(135)));
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_3 = new Transform3d(
-    //     new Translation3d(0.0, 0.0, 0.0),
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(-135)));
-
-    // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_4 = new Transform3d(
-    //     new Translation3d(0.0, 0.0, 0.0),
-    //     new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(-45)));
-     
     public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_1 = new Transform3d(
         new Translation3d(-0.063, -0.3125, 0.562),// Get from CAD Model In meters-0.063, -0.3125, 0.562
         new Rotation3d(0.0, Units.degreesToRadians(0.0), Units.degreesToRadians(-45.0)));
@@ -342,4 +315,15 @@ public static class LineBreakConstants {
     public static final boolean LINEBREAK_BLOCKED = false;
     public static final boolean LINEBREAK_OPEN = true;
   }
-}
+
+
+  //I am so sorry Wesley But i have to do this
+//
+  public void periodic() {
+
+   
+    
+
+    
+  }
+ }

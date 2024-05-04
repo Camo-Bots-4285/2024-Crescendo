@@ -65,14 +65,17 @@ public class TeleopSwerve extends Command {
     double rot = rotation.getAsDouble();
 
     // 2. Apply deadband/deadzone, can edit this later to have smoother behavior
+    //If velocity is less then number it will be set to zero need to tune these value with driver
     fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0; 
     fwdY = Math.abs(fwdY) > 0.04 ? fwdY : 0.0;
     rot = Math.abs(rot) > .3 ? rot : 0.0;
 
-    // 3. Make the driving smoother
-    // fwdX = xLimiter.calculate(fwdX) * SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-    // fwdY = yLimiter.calculate(fwdY) * SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-    // rot = turningLimiter.calculate(rot) * SwerveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    // 3. Make the driving smoother this will set max velocity in teleop 
+    //There should be three setting that are programed in normal and other two are activated by buttons 
+    //superfast and superslow(should be pared with high amps if push needed)
+    fwdX = xLimiter.calculate(fwdX) * SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+    fwdY = yLimiter.calculate(fwdY) * SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+    rot = turningLimiter.calculate(rot) * SwerveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
     drive.drive(
         -fwdX,
