@@ -67,7 +67,7 @@ public class TeleopSwerve extends Command {
     // 2. Apply deadband/deadzone, can edit this later to have smoother behavior
     //If velocity is less then number it will be set to zero need to tune these value with driver
     fwdX = Math.abs(fwdX) > 0.1 ? fwdX : 0.0; 
-    fwdY = Math.abs(fwdY) > 0.04 ? fwdY : 0.0;
+    fwdY = Math.abs(fwdY) > 0.04 ? fwdY : 0.0;//0.1
     rot = Math.abs(rot) > .3 ? rot : 0.0;
 
     // 3. Make the driving smoother this will set max velocity in teleop 

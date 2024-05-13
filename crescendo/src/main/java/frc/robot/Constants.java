@@ -233,10 +233,11 @@ import frc.robot.subsystems.SwerveBase;
   //   }
 
     public static  double kTeleDriveMaxSpeedMetersPerSecond; // will tune 5.5 
+     //  public static final double kTeleDriveMaxSpeedMetersPerSecond= 5.5;
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 5.5;//will tune
     //Roational
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 0.5;//will tune
-    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 0.5;//will tune
+    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.0;//will tune
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 
@@ -316,14 +317,4 @@ public static class LineBreakConstants {
     public static final boolean LINEBREAK_OPEN = true;
   }
 
-
-  //I am so sorry Wesley But i have to do this
-//
-  public void periodic() {
-
-   
-    
-
-    
-  }
  }

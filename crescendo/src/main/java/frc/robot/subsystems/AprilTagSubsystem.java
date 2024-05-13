@@ -112,7 +112,7 @@ public class AprilTagSubsystem extends SubsystemBase {
 
   
   //Runs only on Tele because it is call to run peridical durning in in robot.Java
-  public void updatedPoseFromTag(){
+  public void updatedPoseFromTagTeleOp(){
     photonEstimator1.run();
     photonEstimator2.run();
     photonEstimator3.run();
@@ -186,13 +186,12 @@ public class AprilTagSubsystem extends SubsystemBase {
 
 
 //Runs all the time (Both auto and teleOp)
-  @Override
-  public void periodic() {  
   
- if (RobotState.isAutonomous()) {
-    if (RobotContainer.CamerasInAuto = true){//Could breack this up into indivdual camera if you wanted
+  public void updatedPoseFromTagAuto() {  
+  
+//  if (RobotState.isAutonomous()) {
+//     if (RobotContainer.CamerasInAuto == true){//Could breack this up into indivdual camera if you wanted
 
-     
 
     photonEstimator1.run();
     //photonEstimator2.run();
@@ -246,10 +245,13 @@ public class AprilTagSubsystem extends SubsystemBase {
       Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d4, visionPose4.timestampSeconds);
     }
     
+
+ 
     LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-tags");
     if(limelightMeasurement.tagCount >= 1){
           Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
         }
+      
     // if (visionPose5 != null) {
     //   // New pose from vision
     //   sawTag = true;
@@ -263,16 +265,16 @@ public class AprilTagSubsystem extends SubsystemBase {
     // System.out.println("Pose: " + Robot.m_robotContainer.m_swerveBase.getPose3d());
     publisher.set(Robot.m_robotContainer.m_swerveBase.getPose3d());
     }
-  }
-  else {//Will test if this works to turn cameras on and off using smart dashboard but still uses them inteleop
+  // }
+  // else {//Will test if this works to turn cameras on and off using smart dashboard but still uses them inteleop
 
     
-  }
   
   
   
   
-  }
+  
+  
 
 
 

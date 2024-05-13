@@ -36,6 +36,7 @@ import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotBase;
 // import com.pathplanner.lib.PathPlannerTrajectory;
 // import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.wpilibj.SPI;
@@ -123,7 +124,7 @@ public void setSlowerSwerve(boolean set) {
                     new PIDConstants(3., 0.0, 0.0),//3.0001  15 looked ok was 25
                     //4.0 // Rotation PID constants      0-9.99    2.5-3.0
                     // betwen 3.43725 over and 8.43715 under    last tested 8.437                 8.4372 looks ok
-                    5.7912, // Max module speed, in m/s
+                    5.7912, //  module speed, in m/s
                     driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig(true , true, 0.5 , 0.45) // 0.5,0.25 0.6 to high 0.4 too low 0.5 nice Default path replanning config. See the API for the options here
                     // above was true , true, 1 , 0.25
@@ -157,10 +158,10 @@ public void setSlowerSwerve(boolean set) {
    * 180 degrees added to offset values to invert one side of the robot so that it
    * doesn't spin in place
    */
-  private static final double frontLeftAngleOffset = Units.degreesToRadians(239.94);//
-  private static final double frontRightAngleOffset = Units.degreesToRadians(159.7);//
-  private static final double rearLeftAngleOffset = Units.degreesToRadians(202.85);//
-  private static final double rearRightAngleOffset = Units.degreesToRadians(132.45);//
+  private static final double frontLeftAngleOffset = Units.degreesToRadians(129.55);//239.94
+  private static final double frontRightAngleOffset = Units.degreesToRadians(198.81);//15
+  private static final double rearLeftAngleOffset = Units.degreesToRadians(150.56);//202.85
+  private static final double rearRightAngleOffset = Units.degreesToRadians(249.87);//132.45
 
   private Pose2d m_pose = new Pose2d(0, 0, new Rotation2d());
   private final double SCALE_X = -1/0.9;
@@ -254,28 +255,28 @@ public void setSlowerSwerve(boolean set) {
 
     //Check if need more amps is true.
     //If it is it will increase smart limiter in SwerveModule
-if (!needMoreAmps) {
-        System.out.println("Amps are 50");
-        SwerveAmps = 50;//Value of swerveAmps without button pressed
+if (needMoreAmps == false) {
+       // System.out.println("Amps are 2");
+        SwerveAmps = 5;//Value of swerveAmps without button pressed
       }
-if (needMoreAmps) {
-      System.out.println("Amps are 60");
+if (needMoreAmps == true) {
+     // System.out.println("Amps are 50");
       SwerveAmps = 60;//Value of swerveAmps with button pressed
     }
 
 
-    if (FasterSwerve = true) {
-        System.out.println("Swerve is Fast");
-       SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 5.5;//Faster swerve speed
+    if (FasterSwerve == true) {
+       //System.out.println("Swerve is Fast");
+       SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 6.0;//Faster swerve speed
       }
-if (SlowerSwerve = true) {
-      System.out.println("Swerve is Slow");
-      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 1.5;//Slower swerve speed
+if (SlowerSwerve == true) {
+      //System.out.println("Swerve is Slow");
+      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 0.25;//Slower swerve speed
     }
-    else{
-      System.out.println("Swerve is Normal");
-      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 4.5;//Normal swerve speed
-    }
+    if(FasterSwerve == false & SlowerSwerve == false){
+     //System.out.println("Swerve is Normal 0.5");
+      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 3.5;//Normal swerve speed
+     }
  }
   
 

@@ -49,8 +49,13 @@ public class RobotContainer {
   public static LEDSubsystem m_led = new LEDSubsystem();
   public static ArmPivotSubsystem m_ArmPivotSubsystem;
   private SendableChooser<String> mChooser;
-  private SendableChooser<Boolean> mChooser1;
-  private SendableChooser<Boolean> mChooser2;
+  private SendableChooser<String> mChooser1;
+  private SendableChooser<String> mChooser2;
+  private SendableChooser<String> mChooser3;
+  private SendableChooser<String> mChooser4;
+  private SendableChooser<String> mChooser5;
+  private SendableChooser<String> mChooser6;
+
 
   // public PowerDistributionPanel newPower = new PowerDistributionPanel(0);
   // public ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -105,6 +110,7 @@ public class RobotContainer {
   public static boolean CamerasInAuto;
   
  public static boolean isRed;
+ 
   /* Subsystems */
   // to bring back arm pivot
   
@@ -131,25 +137,51 @@ public class RobotContainer {
     
     //Put auto in here and they will show up in smart dash board do no forget to select auto before match
     mChooser = new SendableChooser<>();
-    mChooser.setDefaultOption("Default Auto", "C-Shoot3-N2-Shoot6");
+    SmartDashboard.putData("Auto Choices",  mChooser);
+    mChooser.setDefaultOption("Default Auto", "StraitLineTest");
     mChooser.addOption("6 Piece", "C-N3-Shoot6-N7-Shoot6");
     mChooser.addOption("Test Aim", "AlignShooterTest");
     mChooser.addOption("3 By 3", "3 By 3");
     mChooser.addOption("Hellos", "Hellos");
     mChooser.addOption("B-Shoot2-N2-Shoot5", "B-Shoot2-N2-Shoot5");
     mChooser.addOption("New New Auto", "New New Auto");
-    SmartDashboard.putData("Auto Choices" ,  mChooser);
+    
 
-
+    //Used to turn Cameras on and off in auto(Could be duplicated for each camera individualy)
+    //Could be changed to camera in both auto and teleop if needed
     mChooser1 = new SendableChooser<>();
-    mChooser1.setDefaultOption("Yes", CamerasInAuto = true);
-    mChooser1.addOption("No", CamerasInAuto = false);
-    SmartDashboard.putData("All Cameras in Auto" ,  mChooser1);
+    mChooser1.setDefaultOption("Yes", "Yes");
+    mChooser1.addOption("No", "No");
+    SmartDashboard.putData("Camera-1 in Auto" ,  mChooser1);
 
     mChooser2 = new SendableChooser<>();
-    mChooser2.setDefaultOption("Red", isRed = true);//Constants.isRed
-    mChooser2.addOption("Blue", isRed = false);
-    SmartDashboard.putData("Aliance Color" ,  mChooser2);
+    mChooser2.setDefaultOption("Yes", "Yes");
+    mChooser2.addOption("No", "No");
+    SmartDashboard.putData("Camera-2 in Auto" ,  mChooser2);
+
+    mChooser3 = new SendableChooser<>();
+    mChooser3.setDefaultOption("Yes", "Yes");
+    mChooser3.addOption("No", "No");
+    SmartDashboard.putData("Camera-3 in Auto" ,  mChooser3);
+
+    mChooser4 = new SendableChooser<>();
+    mChooser4.setDefaultOption("Yes", "Yes");
+    mChooser4.addOption("No", "No");
+    SmartDashboard.putData("Camera-4 in Auto" ,  mChooser4);
+
+    mChooser5 = new SendableChooser<>();
+    mChooser5.setDefaultOption("Yes", "Yes");
+    mChooser5.addOption("No", "No");
+    SmartDashboard.putData("Camera-5 in Auto" ,  mChooser5);
+
+    
+
+    //Used to make isRed true or false to inverts what side the robot is on
+    mChooser6 = new SendableChooser<>();
+    mChooser6.setDefaultOption("Red", "Red");
+    mChooser6.addOption("Blue", "Blue");
+    SmartDashboard.putData("Aliance Color",  mChooser6);
+  
 
    
 
@@ -215,19 +247,19 @@ public class RobotContainer {
 
     
     //You are welcome. I fucking did it. When button is pressed max amps to swerve drive will change
-     btn_more_amps = new JoystickButton(driverJoystick, 7);
-     btn_more_amps.whileTrue(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(true))) ;
-     btn_more_amps.whileFalse(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(false))) ;
+    //  btn_more_amps = new JoystickButton(driverJoystick, 5);
+    //  btn_more_amps.whileTrue(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(true))) ;
+    //  btn_more_amps.whileFalse(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(false))) ;
       
      //This will change max swerve speed thought SwerveBase to slower
-     btn_slower_swerve = new JoystickButton(driverJoystick, 7);
-     btn_slower_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true))) ;
-     btn_slower_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setSlowerSwerve(false))) ;
+    //  btn_slower_swerve = new JoystickButton(driverJoystick, 8);
+    //  btn_slower_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true))) ;
+    //  btn_slower_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setSlowerSwerve(false))) ;
 
     //This will change max swerve speed thought SwerveBase to faster
-     btn_faster_swerve = new JoystickButton(driverJoystick, 8);
-     btn_faster_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true))) ;
-     btn_faster_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setFasterSwerve(false))) ;
+    //  btn_faster_swerve = new JoystickButton(driverJoystick, 8);
+    //  btn_faster_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true))) ;
+    //  btn_faster_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setFasterSwerve(false))) ;
 
     btn_shooter_feeder = new JoystickButton(driverJoystick, 11);
     btn_shooter_feeder.whileTrue(new ShooterFeederAMP(m_shooterFeeder));
@@ -413,7 +445,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     // return Autos.exampleAuto(m_exampleSubsystem);
-    return AutoBuilder.buildAuto(mChooser.getSelected());//if you want hard coded auto do "AutoName"
+    return AutoBuilder.buildAuto(mChooser.getSelected());//mChooser.getSelected() will get the auto selected from smart dashboard
+    //if you want hard coded auto do "AutoName"
   }
 
   public SwerveBase getSwerveSubsytem() {
@@ -428,4 +461,23 @@ public class RobotContainer {
   public ShooterSubsystem getShooterSubsystem() {
     return m_shooter;
   }
+  
+  //Take what mChooser says and makes isRed true or false only work beacuse method is called in robot(telop perodic)
+  public void SmartDashboardtoCommands() {
+if (mChooser6.getSelected() == "Blue") {
+  isRed = false;
+}
+if (mChooser6.getSelected() == "Red"){
+  isRed = true;
+}
+
+if (mChooser1.getSelected() == "No") {
+  CamerasInAuto = false;
+}
+if (mChooser1.getSelected() == "Yes"){
+  CamerasInAuto = true;
+}
+  
+  }
+
 }

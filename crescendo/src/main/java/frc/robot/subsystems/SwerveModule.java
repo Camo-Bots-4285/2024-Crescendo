@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.SwerveConstants;
 
-import java.time.Period;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -97,8 +96,9 @@ public class SwerveModule extends SubsystemBase {
     rotationMotor.setIdleMode(IdleMode.kBrake);
 
     //If brownout error occurs then lower smart current in SwerveBase Periodic
-    driveMotor.setSmartCurrentLimit(SwerveBase.SwerveAmps);
-
+   // driveMotor.setSmartCurrentLimit(SwerveBase.SwerveAmps);
+   // driveMotor.setSmartCurrentLimit(55);// for comp and drive practice should be uncommented in peroidic an commented put here 
+    
     rotationController = rotationMotor.getPIDController();
     driveController = driveMotor.getPIDController();
 
@@ -307,5 +307,16 @@ public class SwerveModule extends SubsystemBase {
     return new SwerveModuleState(getCurrentVelocityRadiansPerSecond() , getIntegratedAngle());
   }
 
-
+@Override
+  public void periodic() {
+    //If brownout error occurs then lower smart current in SwerveBase Periodic
+  driveMotor.setSmartCurrentLimit(SwerveBase.SwerveAmps);//SwerveBase.SwerveAmps
+  //System.out.println(SwerveBase.SwerveAmps);
+  if(SwerveBase.needMoreAmps == true){
+    driveMotor.setSmartCurrentLimit(35);//SwerveBase.SwerveAmps
+  }
+  if(SwerveBase.needMoreAmps == false)
+   driveMotor.setSmartCurrentLimit(55);
+  }
+  
 }
