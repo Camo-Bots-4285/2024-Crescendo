@@ -310,13 +310,13 @@ public class SwerveModule extends SubsystemBase {
 @Override
   public void periodic() {
     //If brownout error occurs then lower smart current in SwerveBase Periodic
-  driveMotor.setSmartCurrentLimit(SwerveBase.SwerveAmps);//SwerveBase.SwerveAmps
-  //System.out.println(SwerveBase.SwerveAmps);
+  // driveMotor.setSmartCurrentLimit(SwerveBase.SwerveAmps);//SwerveBase.SwerveAmps
+ //System.out.println(SwerveBase.SwerveAmps);
   if(SwerveBase.needMoreAmps == true){
     driveMotor.setSmartCurrentLimit(35);//SwerveBase.SwerveAmps
   }
   if(SwerveBase.needMoreAmps == false)
    driveMotor.setSmartCurrentLimit(55);
-  }
+    }
   
 }

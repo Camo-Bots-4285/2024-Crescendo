@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveBase;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -197,14 +198,14 @@ import frc.robot.subsystems.SwerveBase;
 
     public static Translation2d mDriveRadius = new Translation2d(trackWidth/2, wheelBase / 2);
     /* Swerve Profiling Values */
-    public static final double maxSpeed = 1.3; //Wass "faster as number gets closer to two"
-    public static final double maxAngularVelocity = 3.5;//no clue there value will be tune after 2024 seasion
+    public static final double maxSpeed = 5.5; //Wass "faster as number gets closer to two"
+    public static final double maxAngularVelocity = 4.0;//no clue there value will be tune after 2024 seasion
 
-    public static final int frontLeftRotationMotorId = 2;
-    public static final int frontLeftDriveMotorId = 1;
+    public static final int frontLeftRotationMotorId = 2;//21
+    public static final int frontLeftDriveMotorId = 1;//11
 
-    public static final int frontRightRotationMotorId = 8;
-    public static final int frontRightDriveMotorId = 7;
+    public static final int frontRightRotationMotorId = 8;//24
+    public static final int frontRightDriveMotorId = 7;//14
 
     public static final int rearLeftRotationMotorId = 4;
     public static final int rearLeftDriveMotorId = 3;
@@ -234,10 +235,10 @@ import frc.robot.subsystems.SwerveBase;
 
     public static  double kTeleDriveMaxSpeedMetersPerSecond; // will tune 5.5 
      //  public static final double kTeleDriveMaxSpeedMetersPerSecond= 5.5;
-    public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 5.5;//will tune
+    public static double kTeleDriveMaxAccelerationUnitsPerSecond = 0.9;//will tune
     //Roational
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 0.5;//will tune
-    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.0;//will tune
+    public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.5;//will tune
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
 

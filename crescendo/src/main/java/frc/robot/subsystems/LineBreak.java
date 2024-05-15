@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.fasterxml.jackson.databind.JsonSerializable.Base;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -31,10 +33,15 @@ public class LineBreak extends SubsystemBase {
   public Command exampleMethodCommand() {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  return runOnce(
+    ()-> {
+
+    });
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run   
   }
 
   /**
@@ -47,10 +54,7 @@ public class LineBreak extends SubsystemBase {
     return false;
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run   
-  }
+  
 
   public Boolean getBottomState() {
     return bottom_sensor.get();
@@ -60,9 +64,9 @@ public class LineBreak extends SubsystemBase {
     return top_sensor.get();
   }
   
-
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+  
 }

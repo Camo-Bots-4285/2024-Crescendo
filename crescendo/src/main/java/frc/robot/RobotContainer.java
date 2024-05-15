@@ -10,6 +10,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.*;
 
+
 import java.util.function.BiFunction;
 import java.util.function.DoubleSupplier;
 
@@ -55,7 +56,7 @@ public class RobotContainer {
   private SendableChooser<String> mChooser4;
   private SendableChooser<String> mChooser5;
   private SendableChooser<String> mChooser6;
-
+  
 
   // public PowerDistributionPanel newPower = new PowerDistributionPanel(0);
   // public ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -107,8 +108,13 @@ public class RobotContainer {
   
   private PIDController angleController;
 
-  public static boolean CamerasInAuto;
+  public static boolean Camera1_InAuto;
+  public static boolean Camera2_InAuto;
+  public static boolean Camera3_InAuto;
+  public static boolean Camera4_InAuto;
+  public static boolean Camera5_InAuto;
   
+
  public static boolean isRed;
  
   /* Subsystems */
@@ -130,10 +136,11 @@ public class RobotContainer {
     driverJoystick = new Joystick(0);
     streamdeck = new Joystick(1);
 
+    //Added by Spencer to ramp power by lever
     limit = () -> 0.55 - 0.45 * driverJoystick.getRawAxis(SwerveConstants.sliderAxis);
     /* maps sliderAxis to be between 0.1 and 1.0 */
     stopRotation = () -> driverJoystick.getRawButton(9) ? 0.0 : 1.0; //Locks Rotation
-    Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
+   // Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
     
     //Put auto in here and they will show up in smart dash board do no forget to select auto before match
     mChooser = new SendableChooser<>();
@@ -241,25 +248,25 @@ public class RobotContainer {
     // cancelling on release.
     // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-  btn_reset_yaw = new JoystickButton(driverJoystick, 7);
+    btn_reset_yaw = new JoystickButton(driverJoystick, 7);
     btn_reset_yaw.onTrue(new InstantCommand(() -> m_swerveBase.setNeedPigeonReset(true)));
 
 
     
     //You are welcome. I fucking did it. When button is pressed max amps to swerve drive will change
-    //  btn_more_amps = new JoystickButton(driverJoystick, 5);
-    //  btn_more_amps.whileTrue(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(true))) ;
-    //  btn_more_amps.whileFalse(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(false))) ;
+     btn_more_amps = new JoystickButton(driverJoystick, 5);
+     btn_more_amps.whileTrue(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(true)));
+     btn_more_amps.onFalse(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(false)));
       
      //This will change max swerve speed thought SwerveBase to slower
-    //  btn_slower_swerve = new JoystickButton(driverJoystick, 8);
-    //  btn_slower_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true))) ;
-    //  btn_slower_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setSlowerSwerve(false))) ;
+     btn_slower_swerve = new JoystickButton(driverJoystick, 8);
+     btn_slower_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true)));
+     btn_slower_swerve.onFalse(new RunCommand(() -> m_swerveBase.setSlowerSwerve(false)));
 
     //This will change max swerve speed thought SwerveBase to faster
-    //  btn_faster_swerve = new JoystickButton(driverJoystick, 8);
-    //  btn_faster_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true))) ;
-    //  btn_faster_swerve.whileFalse(new RunCommand(() -> m_swerveBase.setFasterSwerve(false))) ;
+     btn_faster_swerve = new JoystickButton(driverJoystick, 3);
+     btn_faster_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true)));
+     btn_faster_swerve.onFalse(new RunCommand(() -> m_swerveBase.setFasterSwerve(false)));
 
     btn_shooter_feeder = new JoystickButton(driverJoystick, 11);
     btn_shooter_feeder.whileTrue(new ShooterFeederAMP(m_shooterFeeder));
@@ -378,7 +385,7 @@ public class RobotContainer {
     // Moves Arm Into Travel Position
     btn_store = new JoystickButton(streamdeck, 10);
     btn_store.whileTrue(new ArmPivotStore (m_ArmPivotSubsystem));
-
+  
     // Shoots Note From Directly In Front Of Speaker
     btn_shooting_without_cameras = new JoystickButton(streamdeck, 3);
     btn_shooting_without_cameras.whileTrue(new ShootingWithoutCameras(m_ArmPivotSubsystem));
@@ -435,6 +442,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("FeederIntake", (new ShooterFeederPickUp(m_shooterFeeder)));
     NamedCommands.registerCommand("Align", (new AlignPoseSpeaker(m_swerveBase)));
     NamedCommands.registerCommand("AlignShooter", (new ArmPivotShooting(m_ArmPivotSubsystem)));
+     NamedCommands.registerCommand("HasNote", (new HasNote(m_lineBreak)));
   }
 
   /**
@@ -464,20 +472,48 @@ public class RobotContainer {
   
   //Take what mChooser says and makes isRed true or false only work beacuse method is called in robot(telop perodic)
   public void SmartDashboardtoCommands() {
-if (mChooser6.getSelected() == "Blue") {
-  isRed = false;
-}
-if (mChooser6.getSelected() == "Red"){
-  isRed = true;
-}
+  if (mChooser6.getSelected() == "Blue") {
+    isRed = false;
+  }
+  if (mChooser6.getSelected() == "Red"){
+   isRed = true;
+    }
 
-if (mChooser1.getSelected() == "No") {
-  CamerasInAuto = false;
-}
-if (mChooser1.getSelected() == "Yes"){
-  CamerasInAuto = true;
-}
+  if (mChooser1.getSelected() == "No") {
+    Camera1_InAuto = false;
+  }
+  if (mChooser1.getSelected() == "Yes"){
+   Camera1_InAuto = true;
+  }
   
+  if (mChooser2.getSelected() == "No") {
+    Camera2_InAuto = false;
+  }
+  if (mChooser2.getSelected() == "Yes"){
+    Camera2_InAuto = true;
+  }
+  
+  if (mChooser3.getSelected() == "No") {
+    Camera3_InAuto = false;
+  }
+  if (mChooser3.getSelected() == "Yes"){
+    Camera3_InAuto = true;
   }
 
+  if (mChooser4.getSelected() == "No") {
+    Camera4_InAuto = false;
+  }
+  if (mChooser4.getSelected() == "Yes"){
+   Camera4_InAuto = true;
+  }
+  
+  if (mChooser5.getSelected() == "No") {
+   Camera5_InAuto = false;
+  }
+  if (mChooser5.getSelected() == "Yes"){
+    Camera5_InAuto = true;
+  }
+  
+  }
+  
 }

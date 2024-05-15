@@ -46,7 +46,7 @@ public class TeleopSwerve extends Command {
     this.isFieldOriented = isFieldOriented;
 
     this.xLimiter = new SlewRateLimiter(SwerveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
-    this.yLimiter = new SlewRateLimiter(SwerveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
+    this.yLimiter = new SlewRateLimiter(SwerveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);//kTeleDriveMaxAccelerationUnitsPerSecond
     this.turningLimiter = new SlewRateLimiter(SwerveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     addRequirements(subsystem);

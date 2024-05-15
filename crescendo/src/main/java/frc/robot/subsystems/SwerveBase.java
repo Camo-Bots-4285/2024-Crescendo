@@ -66,6 +66,7 @@ public static boolean FasterSwerve;
 public void setFasterSwerve(boolean set) {
   FasterSwerve = set;
   }
+
 public static boolean SlowerSwerve;
 public void setSlowerSwerve(boolean set) {
    SlowerSwerve = set;
@@ -119,15 +120,12 @@ public void setSlowerSwerve(boolean set) {
             this::getRobotRelativeChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::robotRelativeDrive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(5.75, 0.0, 0.0),// d 0.025    0.5 under shoot 4over shoot
-                    //4.0,0.0,0.885 // Translation PID constants   0-9.99  under  0.885 -0.8855  over           new PIDConstants(5.0, 0.0, 0.00005), // Translation PID constants 
-                    new PIDConstants(3., 0.0, 0.0),//3.0001  15 looked ok was 25
-                    //4.0 // Rotation PID constants      0-9.99    2.5-3.0
-                    // betwen 3.43725 over and 8.43715 under    last tested 8.437                 8.4372 looks ok
+                    new PIDConstants(5.0, 0.0, 0.0),// 5.75
+                    new PIDConstants(5.0, 0.0, 0.0),//3
                     5.7912, //  module speed, in m/s
                     driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig(true , true, 0.5 , 0.45) // 0.5,0.25 0.6 to high 0.4 too low 0.5 nice Default path replanning config. See the API for the options here
-                    // above was true , true, 1 , 0.25
+                    new ReplanningConfig(false , false, 0.5 , 0.45) // 0.5,0.25 0.6 to high 0.4 too low 0.5 nice Default path replanning config. See the API for the options here
+                   
             ),
             () -> {
               // Boolean supplier that controls when the path will be mirrored for the red alliance
@@ -233,6 +231,9 @@ public void setSlowerSwerve(boolean set) {
   
   @Override
   public void periodic() {
+
+    System.out.println(SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond);
+
     // update the odometry every 20ms
     odometry.update(getHeading(), getModulePositions());
 
@@ -257,26 +258,27 @@ public void setSlowerSwerve(boolean set) {
     //If it is it will increase smart limiter in SwerveModule
 if (needMoreAmps == false) {
        // System.out.println("Amps are 2");
-        SwerveAmps = 5;//Value of swerveAmps without button pressed
+        SwerveAmps = 45;//Value of swerveAmps without button pressed
       }
 if (needMoreAmps == true) {
      // System.out.println("Amps are 50");
-      SwerveAmps = 60;//Value of swerveAmps with button pressed
+      SwerveAmps = 55;//Value of swerveAmps with button pressed
     }
 
 
     if (FasterSwerve == true) {
        //System.out.println("Swerve is Fast");
-       SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 6.0;//Faster swerve speed
-      }
-if (SlowerSwerve == true) {
+       SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 5.5;//Faster swerve speed
+       }
+    if (SlowerSwerve == true) {
       //System.out.println("Swerve is Slow");
       SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 0.25;//Slower swerve speed
     }
     if(FasterSwerve == false & SlowerSwerve == false){
      //System.out.println("Swerve is Normal 0.5");
-      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 3.5;//Normal swerve speed
-     }
+      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 1.0;//Normal swerve speed
+      
+    }
  }
   
 

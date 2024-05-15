@@ -32,8 +32,10 @@ import frc.robot.Constants.VisionConstants;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import frc.robot.RobotContainer;
 
+
 public class AprilTagSubsystem extends SubsystemBase {
   
+ 
   boolean sawTag = false;
   private OriginPosition originPosition;
   //TODO Tune
@@ -187,27 +189,31 @@ public class AprilTagSubsystem extends SubsystemBase {
 
 //Runs all the time (Both auto and teleOp)
   
-  public void updatedPoseFromTagAuto() {  
-  
-//  if (RobotState.isAutonomous()) {
-//     if (RobotContainer.CamerasInAuto == true){//Could breack this up into indivdual camera if you wanted
+   
+    @Override
+  public void periodic() {
 
+}
+ 
+public void updatedPoseFromTagAuto() { 
 
     photonEstimator1.run();
-    //photonEstimator2.run();
-    //photonEstimator3.run();
+    photonEstimator2.run();
+    photonEstimator3.run();
     photonEstimator4.run();
     
     // Pose3d cam1Pose = new Pose3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
     
     // double lowestAmbiguity = Math.min(photonEstimator1.photonResults.getBestTarget().getPoseAmbiguity() , photonEstimator2.grabLatestEstimatedPose().)
       visionPose1 = photonEstimator1.grabLatestEstimatedPose();
-      //visionPose2 = photonEstimator2.grabLatestEstimatedPose();
-      //visionPose3 = photonEstimator3.grabLatestEstimatedPose();
+      visionPose2 = photonEstimator2.grabLatestEstimatedPose();
+      visionPose3 = photonEstimator3.grabLatestEstimatedPose();
       visionPose4 = photonEstimator4.grabLatestEstimatedPose();
  
      //System.out.println("Camera5 Vision P+ose:" + visionPose5);
      
+
+    if (RobotContainer.Camera1_InAuto == true ) {
     if (visionPose1 != null) {
       // New pose from vision
       sawTag = true;
@@ -217,24 +223,33 @@ public class AprilTagSubsystem extends SubsystemBase {
       }
       Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d1, visionPose1.timestampSeconds);
     }
-    // if (visionPose2 != null) {
-    //   // New pose from vision
-    //   sawTag = true;
-    //   Pose2d pose2d2 = visionPose2.estimatedPose.toPose2d();
-    //   if (originPosition != OriginPosition.kBlueAllianceWallRightSide) {
-    //     pose2d2 = flipAlliance(pose2d2);
-    //   }
-    //   Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d2, visionPose2.timestampSeconds);
-    // }
-    // if (visionPose3 != null) {
-    //   // New pose from vision
-    //   sawTag = true;
-    //   Pose2d pose2d3 = visionPose3.estimatedPose.toPose2d();
-    //   if (originPosition != OriginPosition.kBlueAllianceWallRightSide) {
-    //     pose2d3 = flipAlliance(pose2d3);
-    //   }
-    //   Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d3, visionPose3.timestampSeconds);
-    // }
+    }
+
+    if (RobotContainer.Camera2_InAuto == true ) {
+    if (visionPose2 != null) {
+      // New pose from vision
+      sawTag = true;
+      Pose2d pose2d2 = visionPose2.estimatedPose.toPose2d();
+      if (originPosition != OriginPosition.kBlueAllianceWallRightSide) {
+        pose2d2 = flipAlliance(pose2d2);
+      }
+      Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d2, visionPose2.timestampSeconds);
+    }
+  }
+
+  if (RobotContainer.Camera3_InAuto == true ) {
+    if (visionPose3 != null) {
+      // New pose from vision
+      sawTag = true;
+      Pose2d pose2d3 = visionPose3.estimatedPose.toPose2d();
+      if (originPosition != OriginPosition.kBlueAllianceWallRightSide) {
+        pose2d3 = flipAlliance(pose2d3);
+      }
+      Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d3, visionPose3.timestampSeconds);
+    }
+  }
+
+  if (RobotContainer.Camera4_InAuto == true ) {
     if (visionPose4 != null) {
       // New pose from vision
       sawTag = true;
@@ -243,15 +258,17 @@ public class AprilTagSubsystem extends SubsystemBase {
         pose2d4 = flipAlliance(pose2d4);
       }
       Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(pose2d4, visionPose4.timestampSeconds);
+       
     }
-    
+  }
 
- 
+ if (RobotContainer.Camera5_InAuto == true ) {
     LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-tags");
     if(limelightMeasurement.tagCount >= 1){
           Robot.m_robotContainer.m_swerveBase.getOdometry().addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
         }
-      
+ }
+
     // if (visionPose5 != null) {
     //   // New pose from vision
     //   sawTag = true;
