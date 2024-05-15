@@ -29,7 +29,7 @@ public class FeedToShot extends SequentialCommandGroup {
   public FeedToShot(ShooterSubsystem m_shooter, ArmPivotSubsystem m_ArmPivotSubsystem,
       IntakeSubsystem m_intake, ShooterFeederSubsystem m_shooterFeeder,SwerveBase m_swerveBase) {
 
-    addCommands(
+    new addCommands(
         
         // 1. intake till linebreck is broken
         new ParallelCommandGroup(

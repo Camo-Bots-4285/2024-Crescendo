@@ -13,7 +13,6 @@ import frc.robot.Constants.*;
 
 import java.util.function.BiFunction;
 import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -188,6 +187,11 @@ public class RobotContainer {
     mChooser6.setDefaultOption("Red", "Red");
     mChooser6.addOption("Blue", "Blue");
     SmartDashboard.putData("Aliance Color",  mChooser6);
+
+    mChooser6 = new SendableChooser<>();
+    mChooser6.setDefaultOption("Yes", "Yes");
+    mChooser6.addOption("No", "No");
+    SmartDashboard.putData("Auto Of Set in Auto" ,  mChooser6);
   
 
    
@@ -448,7 +452,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("FeederIntake", (new ShooterFeederPickUp(m_shooterFeeder)));
     NamedCommands.registerCommand("Align", (new AlignPoseSpeaker(m_swerveBase)));
     NamedCommands.registerCommand("AlignShooter", (new ArmPivotShooting(m_ArmPivotSubsystem)));
-     NamedCommands.registerCommand("HasNote", (new HasNote(m_lineBreak)));
+    NamedCommands.registerCommand("HasNote", (new HasNote(m_lineBreak)));
   }
 
   /**
