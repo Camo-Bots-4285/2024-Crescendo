@@ -122,7 +122,7 @@ public void setSlowerSwerve(boolean set) {
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(5.0, 0.0, 0.0),// 5.75
                     new PIDConstants(5.0, 0.0, 0.0),//3
-                    5.7912, //  module speed, in m/s
+                    6.03504, //5.7912  module speed, in m/s
                     driveBaseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig(false , false, 0.5 , 0.45) // 0.5,0.25 0.6 to high 0.4 too low 0.5 nice Default path replanning config. See the API for the options here
                    

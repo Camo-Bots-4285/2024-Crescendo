@@ -140,7 +140,7 @@ public class RobotContainer {
     limit = () -> 0.55 - 0.45 * driverJoystick.getRawAxis(SwerveConstants.sliderAxis);
     /* maps sliderAxis to be between 0.1 and 1.0 */
     stopRotation = () -> driverJoystick.getRawButton(9) ? 0.0 : 1.0; //Locks Rotation
-   // Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
+    Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
     
     //Put auto in here and they will show up in smart dash board do no forget to select auto before match
     mChooser = new SendableChooser<>();
@@ -372,9 +372,15 @@ public class RobotContainer {
     // btn_led_win.whileFalse(new LEDWinYes(m_led));
     // btn_led_win.whileTrue(new LEDWinNo(m_led));
 
-    btn_far_feeder = new JoystickButton(streamdeck, 2);
-    btn_far_feeder.whileTrue(new ArmPivotFarHumanFeeder(m_ArmPivotSubsystem));
-    btn_far_feeder.whileTrue(new ShootingFarHumanFeeder(m_shooter));
+    //Buton auto intakes and shootes
+     btn_far_feeder = new JoystickButton(streamdeck, 2);
+    btn_far_feeder.whileTrue(new FeedToShot(m_shooter, m_ArmPivotSubsystem, m_intake,  m_shooterFeeder, m_swerveBase));
+  //btn_far_feeder.whileTrue(new Commands.repeatedly(() -> (new FeedToShot(m_shooter, m_ArmPivotSubsystem, m_intake,  m_shooterFeeder, m_swerveBase))));
+
+    //Buton mauale
+    // btn_far_feeder = new JoystickButton(streamdeck, 2);
+    // btn_far_feeder.whileTrue(new ArmPivotFarHumanFeeder(m_ArmPivotSubsystem));
+    // btn_far_feeder.whileTrue(new ShootingFarHumanFeeder(m_shooter));
 
     // Gets Note From Human Feeder And Uses Line Breaks To Stop Note At Specific Position
     btn_human_feeder = new JoystickButton(streamdeck, 9);

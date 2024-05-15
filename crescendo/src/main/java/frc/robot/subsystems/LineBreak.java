@@ -16,7 +16,8 @@ public class LineBreak extends SubsystemBase {
 
       public boolean resting_bottom_bitch_state = false;
       public boolean top_toe_hoe_state = false;
-
+      public static boolean HasNote;
+      
       DigitalInput bottom_sensor = new DigitalInput(LineBreakConstants.DIO_BOTTOM_SENSOR);  
       DigitalInput top_sensor = new DigitalInput(LineBreakConstants.DIO_TOP_SENSOR);
 
@@ -41,7 +42,13 @@ public class LineBreak extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run   
+    // This method will be called once per scheduler run
+    if (LineBreakConstants.DIO_BOTTOM_SENSOR == 0){
+      HasNote = true;
+  }
+      else{
+      HasNote = false;
+  }   
   }
 
   /**

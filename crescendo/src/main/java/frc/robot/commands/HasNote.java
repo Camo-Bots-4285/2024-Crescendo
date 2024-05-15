@@ -16,7 +16,7 @@ import frc.robot.Constants.LEDConstants;
 public class HasNote extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final LineBreak m_subsystem;
- private static boolean HasNote;
+
 
   /**
    * Creates a new ExampleCommand.
@@ -36,12 +36,7 @@ public class HasNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (LineBreakConstants.DIO_BOTTOM_SENSOR == 0){
-        HasNote = true;
-    }
-        else{
-        HasNote = false;
-    }
+ 
   }
 
   // Called once the command ends or is interrupted.
@@ -54,7 +49,7 @@ public class HasNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (HasNote == true){
+    if (LineBreak.HasNote == true){
         return false;
     }
     else{
