@@ -136,10 +136,10 @@ public class RobotContainer {
     streamdeck = new Joystick(1);
 
     //Added by Spencer to ramp power by lever
-    limit = () -> 0.55 - 0.45 * driverJoystick.getRawAxis(SwerveConstants.sliderAxis);
-    /* maps sliderAxis to be between 0.1 and 1.0 */
-    stopRotation = () -> driverJoystick.getRawButton(9) ? 0.0 : 1.0; //Locks Rotation
-    Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
+     limit = () -> 0.55 - 0.45 * driverJoystick.getRawAxis(SwerveConstants.sliderAxis);
+    // /* maps sliderAxis to be between 0.1 and 1.0 */
+     stopRotation = () -> driverJoystick.getRawButton(9) ? 0.0 : 1.0; //Locks Rotation
+    // Clamp  = (val, lim) -> (Math.abs(val) < lim) ? val : Math.copySign(lim, val);
     
     //Put auto in here and they will show up in smart dash board do no forget to select auto before match
     mChooser = new SendableChooser<>();
@@ -203,10 +203,9 @@ public class RobotContainer {
     m_swerveBase.setDefaultCommand(
         new TeleopSwerve(
             m_swerveBase,
-            () -> Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.translationAxis), limit.getAsDouble()),
-            () -> Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.strafeAxis), limit.getAsDouble()),
-            () -> -Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.rotationAxis),
-                limit.getAsDouble() * stopRotation.getAsDouble()),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.translationAxis)),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.strafeAxis)),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.rotationAxis)* stopRotation.getAsDouble()),
             () -> !driverJoystick.getRawButton(1) // inverted=fieldCentric, non-inverted=RobotCentric
             //Sandman 
         ));
@@ -255,21 +254,24 @@ public class RobotContainer {
     btn_reset_yaw = new JoystickButton(driverJoystick, 7);
     btn_reset_yaw.onTrue(new InstantCommand(() -> m_swerveBase.setNeedPigeonReset(true)));
 
-
+//Buton auto intakes and shootes
+//Must test before use
+     btn_far_feeder = new JoystickButton(driverJoystick, 5);
+    btn_far_feeder.whileTrue(new RunCommand(() -> new FeedToShot(m_shooter, m_ArmPivotSubsystem, m_intake,  m_shooterFeeder, m_swerveBase,m_lineBreak)));
     
     //You are welcome. I fucking did it. When button is pressed max amps to swerve drive will change
-     btn_more_amps = new JoystickButton(driverJoystick, 5);
+     btn_more_amps = new JoystickButton(driverJoystick, 8);
      btn_more_amps.whileTrue(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(true)));
      btn_more_amps.onFalse(new RunCommand(() -> m_swerveBase.setNeedMoreAmps(false)));
       
      //This will change max swerve speed thought SwerveBase to slower
      btn_slower_swerve = new JoystickButton(driverJoystick, 8);
-     btn_slower_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true)));
+     btn_slower_swerve.toggleOnTrue(new RunCommand(() -> m_swerveBase.setSlowerSwerve(true)));
      btn_slower_swerve.onFalse(new RunCommand(() -> m_swerveBase.setSlowerSwerve(false)));
 
     //This will change max swerve speed thought SwerveBase to faster
      btn_faster_swerve = new JoystickButton(driverJoystick, 3);
-     btn_faster_swerve.whileTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true)));
+     btn_faster_swerve.toggleOnTrue(new RunCommand(() -> m_swerveBase.setFasterSwerve(true)));
      btn_faster_swerve.onFalse(new RunCommand(() -> m_swerveBase.setFasterSwerve(false)));
 
     btn_shooter_feeder = new JoystickButton(driverJoystick, 11);
@@ -303,10 +305,10 @@ public class RobotContainer {
     btn_aim_speaker.whileTrue(new ArmPivotShooting(m_ArmPivotSubsystem));
     btn_aim_speaker.whileTrue(
         new TeleopSwerve(
-            m_swerveBase,
-            () -> Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.translationAxis), limit.getAsDouble()),
-            () -> Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.strafeAxis), limit.getAsDouble()),
-            () -> angleController.calculate(m_swerveBase.getPose().getRotation().getRadians(), m_swerveBase.getAngleToSpeaker().getRadians()),
+           m_swerveBase,
+            () -> (driverJoystick.getRawAxis(SwerveConstants.translationAxis)),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.strafeAxis)),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.rotationAxis)* stopRotation.getAsDouble()),
             () -> !driverJoystick.getRawButton(1) // inverted=fieldCentric, non-inverted=RobotCentric
         ));
 
@@ -334,10 +336,10 @@ public class RobotContainer {
     btn_aim_human_feeder.whileTrue(
         new TeleopSwerve(
             m_swerveBase,
-            () -> Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.translationAxis), limit.getAsDouble()),
-            () -> Clamp.apply(driverJoystick.getRawAxis(SwerveConstants.strafeAxis), limit.getAsDouble()),
-            () -> angleController.calculate(m_swerveBase.getPose().getRotation().getRadians(), m_ArmPivotSubsystem.getHumanFeederAngle().getRadians()),
-           () -> !driverJoystick.getRawButton(1) // inverted=fieldCentric, non-inverted=RobotCentric
+            () -> (driverJoystick.getRawAxis(SwerveConstants.translationAxis)),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.strafeAxis)),
+            () -> (driverJoystick.getRawAxis(SwerveConstants.rotationAxis)* stopRotation.getAsDouble()),
+            () -> !driverJoystick.getRawButton(1) // inverted=fieldCentric, non-inverted=RobotCentric
         ));
     
     // Intakes Note From Floor And Uses Line Breaks To Stop Note At Specific Position
@@ -376,11 +378,8 @@ public class RobotContainer {
     // btn_led_win.whileFalse(new LEDWinYes(m_led));
     // btn_led_win.whileTrue(new LEDWinNo(m_led));
 
-    //Buton auto intakes and shootes
-     btn_far_feeder = new JoystickButton(streamdeck, 2);
-    btn_far_feeder.whileTrue(new FeedToShot(m_shooter, m_ArmPivotSubsystem, m_intake,  m_shooterFeeder, m_swerveBase));
-  //btn_far_feeder.whileTrue(new Commands.repeatedly(() -> (new FeedToShot(m_shooter, m_ArmPivotSubsystem, m_intake,  m_shooterFeeder, m_swerveBase))));
-
+    
+ 
     //Buton mauale
     // btn_far_feeder = new JoystickButton(streamdeck, 2);
     // btn_far_feeder.whileTrue(new ArmPivotFarHumanFeeder(m_ArmPivotSubsystem));

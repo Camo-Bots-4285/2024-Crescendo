@@ -199,7 +199,7 @@ import frc.robot.subsystems.SwerveBase;
     public static Translation2d mDriveRadius = new Translation2d(trackWidth/2, wheelBase / 2);
     /* Swerve Profiling Values */
     public static final double maxSpeed = 6.03504;//In meter/Second //Wass "faster as number gets closer to two"
-    public static final double maxAngularVelocity = 30.0;//Is in radian or revolutions? 
+    public static final double maxAngularVelocity = 4.0;//Is in radian or revolutions? 
 
     public static final int frontLeftRotationMotorId = 2;//21
     public static final int frontLeftDriveMotorId = 1;//11

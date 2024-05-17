@@ -260,7 +260,7 @@ public class SwerveModule extends SubsystemBase {
     // was driveMotor.setVoltage(SwerveConstants.driveFF.calculate(angularVelolictySetpoint)
     } else {
 
-      driveMotor.set(optimizedDesiredState.speedMetersPerSecond * SwerveConstants.maxSpeed);
+      driveMotor.set(optimizedDesiredState.speedMetersPerSecond* SwerveConstants.maxSpeed);
       //was (optimizedDesiredState.speedMetersPerSecond / SwerveConstants.maxSpeed)
       // this value should not be changed
     }
