@@ -276,7 +276,7 @@ if (needMoreAmps == true) {
     }
     if(FasterSwerve == false & SlowerSwerve == false){
      //System.out.println("Swerve is Normal 0.5");
-      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 1.0;//Normal swerve speed
+      SwerveConstants.kTeleDriveMaxSpeedMetersPerSecond = 0.14;//Normal swerve speed
       
     }
  }

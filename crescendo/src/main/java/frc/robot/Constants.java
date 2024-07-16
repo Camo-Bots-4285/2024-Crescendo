@@ -237,7 +237,7 @@ import frc.robot.subsystems.SwerveBase;
      //  public static final double kTeleDriveMaxSpeedMetersPerSecond= 5.5;
     public static double kTeleDriveMaxAccelerationUnitsPerSecond = 0.9;//will tune
     //Roational
-    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 0.5;//will tune
+    public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = 0.2;//will tune
     public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1.5;//will tune
 
     public static final double cameraToFrontEdgeDistanceMeters = Units.inchesToMeters(7);
